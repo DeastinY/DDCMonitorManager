@@ -41,3 +41,15 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+*.suo
+DDCMonitorManager/bin/Debug/DDCMonitorManager.exe
+*.config
+DDCMonitorManager/bin/Debug/DDCMonitorManager.pdb
+*.manifest
+DDCMonitorManager/obj/Debug/DDCMonitorManager.csproj.FileListAbsolute.txt
+*.Cache
+DDCMonitorManager/obj/Debug/DDCMonitorManager.exe
+*.resources
+DDCMonitorManager/obj/Debug/DDCMonitorManager.pdb
+DDCMonitorManager/obj/Debug/TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs
+DDCMonitorManager/bin/Debug/DDCMonitorManager.vshost.exe

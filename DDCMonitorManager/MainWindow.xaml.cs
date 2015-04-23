@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -24,7 +25,10 @@ namespace DDCMonitorManager
         public MainWindow()
         {
             InitializeComponent();
-            brightnessControl = new BrightnessControl();
+            Window window = Window.GetWindow(this);
+            var wih = new WindowInteropHelper(window);
+            IntPtr hWnd = wih.Handle;
+            brightnessControl = new BrightnessControl(hWnd);
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

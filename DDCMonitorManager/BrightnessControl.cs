@@ -13,13 +13,24 @@ namespace DDCMonitorManager
         [DllImport("gdi32.dll")]
         private unsafe static extern bool SetDeviceGammaRamp(Int32 hdc, void* ramp);
 
-        public BrightnessControl()
+        [DllImport("user32.dll")]
+        static extern Int32 MonitorFromWindow(IntPtr hwnd, Int32 dwflags);
+
+        [DllImport("Dxva2.dll")]
+        private static extern bool GetNumberOfPhysicalMonitorsFromHMONITOR(Int32 hMonitor,out Int32 num);
+
+        private IntPtr hWnd;
+
+        public BrightnessControl(IntPtr hWnd)
         {
+            this.hWnd = hWnd;
         }
 
         public unsafe bool SetBrightness(short brightness)
         {
-            Int32 hdc = Graphics.FromHwnd(IntPtr.Zero).GetHdc().ToInt32();
+            Int32 hMonitor = MonitorFromWindow(hWnd, 1); //MONITOR_DEFAULTTOPRIMARY
+            Int32 num = 0;
+            GetNumberOfPhysicalMonitorsFromHMONITOR(hMonitor,out num);
 
             if (brightness > 255)
                 brightness = 255;
@@ -45,12 +56,12 @@ namespace DDCMonitorManager
             }
 
             //For some reason, this always returns false?
-            bool retVal = SetDeviceGammaRamp(hdc, gArray);
+            //bool retVal = SetDeviceGammaRamp(hdc, gArray);
 
             //Memory allocated through stackalloc is automatically free'd
             //by the CLR.
 
-            return retVal;
+            return false;
         }
     }
 }
