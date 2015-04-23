@@ -19,6 +19,12 @@ namespace DDCMonitorManager
         [DllImport("Dxva2.dll")]
         private static extern bool GetNumberOfPhysicalMonitorsFromHMONITOR(Int32 hMonitor,out Int32 num);
 
+        [DllImport("Dxva2.dll")]
+        private static extern bool SetMonitorBrightness(Int32 hMonitor, short newBrightness);
+
+        [DllImport("Dxva2.dll")]
+        private static extern bool GetMonitorCapabilities(Int32 hMonitor, out Int32 capabilities, out Int32 supportedColorTemperatures);
+
         private IntPtr hWnd;
 
         public BrightnessControl(IntPtr hWnd)
@@ -31,12 +37,20 @@ namespace DDCMonitorManager
             Int32 hMonitor = MonitorFromWindow(hWnd, 1); //MONITOR_DEFAULTTOPRIMARY
             Int32 num = 0;
             GetNumberOfPhysicalMonitorsFromHMONITOR(hMonitor,out num);
+            Int32 capabilities = 0, supportedColorTemperatures = 0;
+            if (!GetMonitorCapabilities(hMonitor, out capabilities, out supportedColorTemperatures))
+            { 
+                //DDC/CI not supported
+                System.Console.WriteLine("DDC/CI not supported by monitor.");
+            }
 
             if (brightness > 255)
                 brightness = 255;
 
             if (brightness < 0)
                 brightness = 0;
+
+            SetMonitorBrightness(hMonitor, brightness);
 
             short* gArray = stackalloc short[3 * 256];
             short* idx = gArray;
