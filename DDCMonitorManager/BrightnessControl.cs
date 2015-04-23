@@ -11,16 +11,16 @@ namespace DDCMonitorManager
     class BrightnessControl
     {
         [DllImport("user32.dll")]
-        private extern Int32 MonitorFromWindow(IntPtr hwnd, Int32 dwflags);
+        private static extern Int32 MonitorFromWindow(IntPtr hwnd, Int32 dwflags);
 
         [DllImport("Dxva2.dll")]
-        private extern bool GetNumberOfPhysicalMonitorsFromHMONITOR(Int32 hMonitor,out Int32 num);
+        private static extern bool GetNumberOfPhysicalMonitorsFromHMONITOR(Int32 hMonitor, out Int32 num);
 
         [DllImport("Dxva2.dll")]
-        private extern bool SetMonitorBrightness(Int32 hMonitor, short newBrightness);
+        private static extern bool SetMonitorBrightness(Int32 hMonitor, short newBrightness);
 
         [DllImport("Dxva2.dll")]
-        private extern bool GetMonitorCapabilities(Int32 hMonitor, out Int32 capabilities, out Int32 supportedColorTemperatures);
+        private static extern bool GetMonitorCapabilities(Int32 hMonitor, out Int32 capabilities, out Int32 supportedColorTemperatures);
 
         private IntPtr hWnd;
 
