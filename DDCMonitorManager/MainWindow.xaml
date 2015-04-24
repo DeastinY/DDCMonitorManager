@@ -1,9 +1,15 @@
 ﻿<Window x:Class="DDCMonitorManager.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        <Label Content="Brightness"/>
-        <Slider ValueChanged="Slider_ValueChanged" HorizontalAlignment="Center" VerticalAlignment="Top" Maximum="255" Minimum="1" SmallChange="1" Width="255"/>
+        Title="DDCMM" Height="Auto" Width="Auto" SizeToContent="WidthAndHeight" ResizeMode="NoResize">
+    <Grid x:Name="Root">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
     </Grid>
 </Window>
