@@ -40,20 +40,25 @@ namespace DDCMonitorManager
             }
         }
 
-        private void AddSlider(int gridPosition)
+        private void AddSlider(int monitorNumber)
         {
-            var mInfo = brightnessControl.GetBrightness();
+            var mInfo = brightnessControl.GetBrightnessCapabilities(monitorNumber);
             Slider slider = new Slider();
+            if (mInfo.current == -1)
+            {
+                slider.IsEnabled = false;
+            }
+            slider.Name = "M"+monitorNumber;
             slider.Minimum = mInfo.minimum;
             slider.Maximum = mInfo.maximum;
             slider.IsSnapToTickEnabled = true;
-            slider.Width = 100;
+            slider.Width = 200;
             slider.Value = mInfo.current;
             slider.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
             slider.ValueChanged += Slider_ValueChanged;
 
             TextBlock text = new TextBlock();
-            text.Width = 20;
+            text.Width = 50;
             text.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
 
             Binding b = new Binding();
@@ -63,21 +68,34 @@ namespace DDCMonitorManager
             b.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
             text.SetBinding(TextBlock.TextProperty, b);
             Root.Children.Add(slider);
-            Grid.SetRow(slider, gridPosition);
+            Grid.SetRow(slider, monitorNumber);
             Grid.SetColumn(slider, 1);
             Root.Children.Add(text);
-            Grid.SetRow(text,gridPosition);
+            Grid.SetRow(text,monitorNumber);
             Grid.SetColumn(text, 0);
             Root.InvalidateVisual();
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            Slider slider = sender as Slider;
+            int monitorNumber = Int32.Parse(slider.Name.Substring(1));
             var conv = (short)e.NewValue;
             if (brightnessControl != null)
             {
-                brightnessControl.SetBrightness(conv); 
+                brightnessControl.SetBrightness(conv,monitorNumber); 
             }
+        }
+
+        private void SettingsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            SettingsWindow settingsWindow = new SettingsWindow(this);
+            settingsWindow.Show();
+        }
+
+        private void AboutMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

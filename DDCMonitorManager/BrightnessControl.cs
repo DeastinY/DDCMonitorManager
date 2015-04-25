@@ -21,7 +21,6 @@ namespace DDCMonitorManager
         {
             this.hWnd = hWnd;
             SetupMonitors();
-            GetMonitorCapabilities();
         }
 
         private void SetupMonitors()
@@ -37,33 +36,33 @@ namespace DDCMonitorManager
             lastWin32Error = Marshal.GetLastWin32Error();
         }
 
-        private void GetMonitorCapabilities()
+        private void GetMonitorCapabilities(int monitorNumber)
         {
             uint pdwMonitorCapabilities = 0u;
             uint pdwSupportedColorTemperatures = 0u;
-            var monitorCapabilities = NativeCalls.GetMonitorCapabilities(pPhysicalMonitorArray[0].hPhysicalMonitor, ref pdwMonitorCapabilities, ref pdwSupportedColorTemperatures);
+            var monitorCapabilities = NativeCalls.GetMonitorCapabilities(pPhysicalMonitorArray[monitorNumber].hPhysicalMonitor, ref pdwMonitorCapabilities, ref pdwSupportedColorTemperatures);
             Debug.WriteLine(pdwMonitorCapabilities);
             Debug.WriteLine(pdwSupportedColorTemperatures);
             int lastWin32Error = Marshal.GetLastWin32Error();
             NativeStructures.MC_DISPLAY_TECHNOLOGY_TYPE type = NativeStructures.MC_DISPLAY_TECHNOLOGY_TYPE.MC_SHADOW_MASK_CATHODE_RAY_TUBE;
-            var monitorTechnologyType = NativeCalls.GetMonitorTechnologyType(pPhysicalMonitorArray[0].hPhysicalMonitor, ref type);
+            var monitorTechnologyType = NativeCalls.GetMonitorTechnologyType(pPhysicalMonitorArray[monitorNumber].hPhysicalMonitor, ref type);
             Debug.WriteLine(type);
             lastWin32Error = Marshal.GetLastWin32Error();
         }
 
-        public bool SetBrightness(short brightness)
+        public bool SetBrightness(short brightness,int monitorNumber)
         {
-            var brightnessWasSet = NativeCalls.SetMonitorBrightness(pPhysicalMonitorArray[0].hPhysicalMonitor, (short)brightness);
+            var brightnessWasSet = NativeCalls.SetMonitorBrightness(pPhysicalMonitorArray[monitorNumber].hPhysicalMonitor, (short)brightness);
             if (brightnessWasSet)
                 Debug.WriteLine("Brightness set to " + (short)brightness);
             int lastWin32Error = Marshal.GetLastWin32Error();
             return brightnessWasSet;
         }
 
-        public BrightnessInfo GetBrightness()
+        public BrightnessInfo GetBrightnessCapabilities(int monitorNumber)
         {
             short current = -1, minimum = -1, maximum = -1;
-            bool getBrightness = NativeCalls.GetMonitorBrightness(pPhysicalMonitorArray[0].hPhysicalMonitor,ref minimum,ref current,ref maximum);
+            bool getBrightness = NativeCalls.GetMonitorBrightness(pPhysicalMonitorArray[monitorNumber].hPhysicalMonitor,ref minimum,ref current,ref maximum);
             int lastWin32Error = Marshal.GetLastWin32Error();
             return new BrightnessInfo { minimum = minimum, maximum = maximum, current = current};
         }
